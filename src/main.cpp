@@ -7,91 +7,207 @@
 #include "Decoder.h"
 #include "Exceptions.h"
 
-void help() {
-    std::cout << "Usage: huff < -e > (< -d >) < input > -o < output > \n";
-    std::cout << "flags:\n";
+#include <iostream>
 
-    std::cout << "-e : " << std::setw(4) << "encode provided file\n";
-    std::cout << "-c : " << std::setw(4) << "encode only if compressed file is smaller than input\n";
-    std::cout << "-d : " << std::setw(4) << "decode provided file\n";
-    std::cout << "-o : " << std::setw(4) << "set output file\n\twithout this flag programm output will be pushed directly to the terminal window\n";
+void help() {
+    std::cout <<
+R"(HUFF(1)                         User Commands                        HUFF(1)
+
+NAME
+    huff - file compressor/decompressor based on Huffman coding
+
+SYNOPSIS
+    huff [OPTIONS] INPUT [-o OUTPUT]
+
+DESCRIPTION
+    huff encodes or decodes files using Huffman coding.
+
+    Exactly one mode must be specified:
+        -e    encode input file
+        -d    decode input file
+        -c    encode only if result is smaller than input
+
+    INPUT is a path to the input file.
+
+    If -o is not specified, output is written to standard output.
+
+OPTIONS
+    -e
+        Encode INPUT into compressed form.
+
+    -d
+        Decode INPUT from compressed form.
+
+    -c
+        Encode INPUT only if compressed size is smaller than original.
+        Otherwise no output file is produced.
+
+    -o OUTPUT
+        Write result to OUTPUT file instead of standard output.
+
+    --help
+        Display this help and exit.
+
+BEHAVIOR
+    - Only one of -e, -d, -c can be used at a time.
+    - If multiple modes are provided, the program exits with error.
+    - If INPUT is missing, the program exits with error.
+    - If OUTPUT is not specified, result is written to stdout.
+
+EXIT STATUS
+    0    success
+    1    invalid arguments or runtime error
+
+EXAMPLES
+    Encode file:
+        huff -e input.txt -o output.huff
+
+    Decode file:
+        huff -d output.huff -o restored.txt
+
+    Encode only if beneficial:
+        huff -c input.txt -o output.huff
+
+    Write to stdout:
+        huff -e input.txt
+
+NOTES
+    This is a simple implementation of Huffman coding.
+    Binary input/output is always used.
+
+)";
+}
+
+enum class Mode {
+    None,
+    Encode,
+    Decode,
+    EncodeCareful
+};
+
+struct Config {
+    Mode mode = Mode::None;
+    const char* input = nullptr;
+    const char* output = nullptr;
+    bool help = false;
+};
+
+bool parseArgs(int argc, char* argv[], Config& cfg) {
+    if (argc < 2) {
+        return false;
+    }
+
+    for (int i = 1; i < argc; ++i) {
+        const char* arg = argv[i];
+
+        // help
+        if (std::strcmp(arg, "--help") == 0) {
+            cfg.help = true;
+            return true;
+        }
+
+        else if (std::strcmp(arg, "-e") == 0) {
+            if (cfg.mode != Mode::None) return false;
+            cfg.mode = Mode::Encode;
+        }
+        else if (std::strcmp(arg, "-d") == 0) {
+            if (cfg.mode != Mode::None) return false;
+            cfg.mode = Mode::Decode;
+        }
+        else if (std::strcmp(arg, "-c") == 0) {
+            if (cfg.mode != Mode::None) return false;
+            cfg.mode = Mode::EncodeCareful;
+        }
+
+        // output
+        else if (std::strcmp(arg, "-o") == 0) {
+            if (i + 1 >= argc) return false;
+            cfg.output = argv[++i];
+        }
+
+        // input
+        else {
+            if (arg[0] == '-') {
+                return false;
+            }
+
+            if (cfg.input != nullptr) {
+                return false;
+            }
+
+            cfg.input = arg;
+        }
+    }
+
+    if (!cfg.help) {
+        if (cfg.mode == Mode::None) return false;
+        if (cfg.input == nullptr) return false;
+    }
+
+    return true;
 }
 
 int main(int argc, char* argv[]) {
-    try {
-        if (argc > 5 || argc == 0) {
-            throw UsageException();
-        }
-    } catch (const UsageException& ex) {
-        std::cerr << ex.what() << "\n";
+    Config cfg;
+
+    if (!parseArgs(argc, argv, cfg)) {
+        std::cerr << "Invalid arguments\n";
+        help();
+        return 1;
     }
 
-    std::string currentCommand = argv[1];
-    if (currentCommand == "--help") {
+    if (cfg.help) {
         help();
-    } else if (currentCommand == "-e") {
-        std::ifstream in(argv[2], std::ios::binary);
-        std::ofstream out(argv[3], std::ios::binary);
+        return 0;
+    }
 
-        if (!in) {
-            std::cerr << "Cannot open input file: " << argv[1] << "\n";
+    std::ifstream in(cfg.input, std::ios::binary);
+    if (!in) {
+        std::cerr << "Cannot open input file: " << cfg.input << "\n";
+        return 1;
+    }
+
+    std::ofstream outFile;
+    std::ostream* out = &std::cout;
+
+    if (cfg.output != nullptr) {
+        outFile.open(cfg.output, std::ios::binary);
+        if (!outFile) {
+            std::cerr << "Cannot open output file: " << cfg.output << "\n";
             return 1;
         }
+        out = &outFile;
+    }
 
-        if (!out) {
-            std::cerr << "Cannot open output file: " << argv[2] << "\n";
-            return 1;
+    try {
+        switch (cfg.mode) {
+            case Mode::Encode:
+                encodeFile(in, *out);
+                break;
+
+            case Mode::Decode:
+                decodeFile(in, *out);
+                break;
+
+            case Mode::EncodeCareful:
+                carefulEncodeFile(in, *out);
+                break;
+
+            default:
+                return 1;
         }
-
-        try {
-            encodeFile(in, out);
-        } catch (const EmptyInputFile& ex) {
-            std::cerr << ex.what() << "\n";
-            return 1;
+    }
+    catch (const CompressionIneffective& e) {
+        if (cfg.output) {
+            outFile.close();
+            std::filesystem::remove(cfg.output);
         }
-    } else if (currentCommand == "-c") {
-        std::ifstream in(argv[2], std::ios::binary);
-
-        if (!in) {
-            std::cerr << "Cannot open input file: " << argv[1] << "\n";
-            return 1;
-        }
-
-        std::ofstream out(argv[3], std::ios::binary);
-
-        if (!out) {
-            std::cerr << "Cannot open output file: " << argv[2] << "\n";
-            return 1;
-        }
-
-        try {
-            carefulEncodeFile(in, out);
-        } catch (const EmptyInputFile& ex) {
-            out.close();
-            std::filesystem::remove(argv[3]);
-            std::cerr << ex.what() << "\n";
-            return 1;
-        } catch (const CompressionIneffective& ex) {
-            out.close();
-            std::filesystem::remove(argv[3]);
-            std::cerr << ex.what() << "\n";
-            return 1;
-        }
-    } else if (currentCommand == "-d") {
-        std::ifstream in(argv[2], std::ios::binary);
-        std::ofstream out(argv[3], std::ios::binary);
-
-        if (!in) {
-            std::cerr << "Cannot open input file: " << argv[1] << "\n";
-            return 1;
-        }
-
-        if (!out) {
-            std::cerr << "Cannot open output file: " << argv[2] << "\n";
-            return 1;
-        }
-
-        decodeFile(in, out);
+        std::cerr << e.what() << "\n";
+        return 1;
+    }
+    catch (const std::exception& e) {
+        std::cerr << e.what() << "\n";
+        return 1;
     }
 
     return 0;
