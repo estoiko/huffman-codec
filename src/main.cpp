@@ -166,6 +166,7 @@ int main(int argc, char* argv[]) {
         std::cerr << "Cannot open input file: " << cfg.input << "\n";
         return 1;
     }
+    in.exceptions(std::ios::badbit);
 
     std::ofstream outFile;
     std::ostream* out = &std::cout;
@@ -176,6 +177,7 @@ int main(int argc, char* argv[]) {
             std::cerr << "Cannot open output file: " << cfg.output << "\n";
             return 1;
         }
+        outFile.exceptions(std::ios::failbit | std::ios::badbit);
         out = &outFile;
     }
 

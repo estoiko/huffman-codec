@@ -30,6 +30,26 @@ std::vector<std::filesystem::path> inputFiles() {
     return files;
 }
 
+std::vector<std::filesystem::path> corruptedFiles() {
+    const std::filesystem::path corruptedDir =
+        std::filesystem::path(HUFFMAN_TEST_INPUT_DIR).parent_path() / "corrupted";
+
+    std::vector<std::filesystem::path> files;
+
+    if (!std::filesystem::exists(corruptedDir)) {
+        return files;
+    }
+
+    for (const auto& entry : std::filesystem::directory_iterator(corruptedDir)) {
+        if (entry.is_regular_file()) {
+            files.push_back(entry.path());
+        }
+    }
+
+    std::sort(files.begin(), files.end());
+    return files;
+}
+
 std::vector<char> readBinaryFile(const std::filesystem::path& path) {
     std::ifstream in(path, std::ios::binary);
     EXPECT_TRUE(in) << "Cannot open file: " << path;
@@ -55,6 +75,24 @@ void prepareArtifactDirs() {
 }
 
 } // namespace
+
+TEST(HuffmanEncoding, CorruptedFiles) {
+    const auto files = corruptedFiles();
+
+    ASSERT_FALSE(files.empty())
+        << "No corrupted files found. Put broken archives into test/corrupted";
+
+    for (const auto& corruptedPath : files) {
+        SCOPED_TRACE(corruptedPath.string());
+
+        std::ifstream in(corruptedPath, std::ios::binary);
+        std::ostringstream out(std::ios::binary);
+
+        ASSERT_TRUE(in) << "Cannot open corrupted file: " << corruptedPath;
+
+        EXPECT_ANY_THROW(decodeFile(in, out));
+    }
+}
 
 TEST(HuffmanEncoding, BasicEncode) {
     prepareArtifactDirs();
