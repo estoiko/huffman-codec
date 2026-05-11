@@ -56,7 +56,7 @@ void prepareArtifactDirs() {
 
 } // namespace
 
-TEST(HuffmanEncoding, EncodesAndDecodesEveryInputFile) {
+TEST(HuffmanEncoding, BasicEncode) {
     prepareArtifactDirs();
 
     const auto files = inputFiles();
@@ -129,7 +129,7 @@ TEST(HuffmanEncoding, EncodesAndDecodesEveryInputFile) {
     }
 }
 
-TEST(HuffmanEncoding, CarefulEncodeSkipsIneffectiveFiles) {
+TEST(HuffmanEncoding, CarefulEncodeSkip) {
     const std::filesystem::path emptyPath = std::filesystem::path(HUFFMAN_TEST_INPUT_DIR) / "empty.txt";
     const std::filesystem::path onePath = std::filesystem::path(HUFFMAN_TEST_INPUT_DIR) / "one_character.txt";
     const std::filesystem::path repeatedPath =
@@ -160,7 +160,7 @@ TEST(HuffmanEncoding, CarefulEncodeSkipsIneffectiveFiles) {
     }
 }
 
-TEST(HuffmanEncoding, CarefulEncodeRoundTripsEffectiveFiles) {
+TEST(HuffmanEncoding, CarefulEncode) {
     const std::vector<std::filesystem::path> effectiveFiles = {
         std::filesystem::path(HUFFMAN_TEST_INPUT_DIR) / "big.txt",
         std::filesystem::path(HUFFMAN_TEST_INPUT_DIR) / "english-lorem.txt",
