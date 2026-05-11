@@ -5,7 +5,6 @@
 #include <ostream>
 #include <istream>
 
-// write a stream wrapper from TP lectures
 class BitWriter {
 private:
     std::ostream& out;

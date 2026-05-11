@@ -1,7 +1,7 @@
-#include <cstddef>
 #include <filesystem>
 #include <iostream>
 #include <fstream>
+#include <cstring>
 
 #include "Encoder.h"
 #include "Decoder.h"
@@ -101,26 +101,26 @@ bool parseArgs(int argc, char* argv[], Config& cfg) {
         const char* arg = argv[i];
 
         // help
-        if (std::strcmp(arg, "--help") == 0) {
+        if (strcmp(arg, "--help") == 0) {
             cfg.help = true;
             return true;
         }
 
-        else if (std::strcmp(arg, "-e") == 0) {
+        else if (strcmp(arg, "-e") == 0) {
             if (cfg.mode != Mode::None) return false;
             cfg.mode = Mode::Encode;
         }
-        else if (std::strcmp(arg, "-d") == 0) {
+        else if (strcmp(arg, "-d") == 0) {
             if (cfg.mode != Mode::None) return false;
             cfg.mode = Mode::Decode;
         }
-        else if (std::strcmp(arg, "-c") == 0) {
+        else if (strcmp(arg, "-c") == 0) {
             if (cfg.mode != Mode::None) return false;
             cfg.mode = Mode::EncodeCareful;
         }
 
         // output
-        else if (std::strcmp(arg, "-o") == 0) {
+        else if (strcmp(arg, "-o") == 0) {
             if (i + 1 >= argc) return false;
             cfg.output = argv[++i];
         }
