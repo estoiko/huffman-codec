@@ -85,6 +85,27 @@ enum class Mode {
     EncodeCareful
 };
 
+bool isEncodeMode(Mode mode) {
+    return mode == Mode::Encode || mode == Mode::EncodeCareful;
+}
+
+bool hasHufExtension(const std::filesystem::path& path) {
+    return path.extension() == ".huf";
+}
+
+std::filesystem::path withHufExtension(const std::filesystem::path& path) {
+    if (hasHufExtension(path)) {
+        return path;
+    }
+
+    return std::filesystem::path(path.string() + ".huf");
+}
+
+std::filesystem::path decodedDefaultOutputPath(std::filesystem::path inputPath) {
+    inputPath.replace_extension();
+    return inputPath;
+}
+
 struct Config {
     Mode mode = Mode::None;
     const char* input = nullptr;
@@ -161,6 +182,11 @@ int main(int argc, char* argv[]) {
         return 0;
     }
 
+    if (cfg.mode == Mode::Decode && !hasHufExtension(cfg.input)) {
+        std::cerr << "Decode input file must have .huf extension\n";
+        return 1;
+    }
+
     std::ifstream in(cfg.input, std::ios::binary);
     if (!in) {
         std::cerr << "Cannot open input file: " << cfg.input << "\n";
@@ -170,13 +196,28 @@ int main(int argc, char* argv[]) {
 
     std::ofstream outFile;
     std::ostream* out = &std::cout;
+    std::filesystem::path outputPath;
 
     if (cfg.output != nullptr) {
+        outputPath = cfg.output;
+
+        if (isEncodeMode(cfg.mode)) {
+            outputPath = withHufExtension(outputPath);
+        }
+    } else if (isEncodeMode(cfg.mode)) {
+        outputPath = withHufExtension(cfg.input);
+    } else if (cfg.mode == Mode::Decode) {
+        outputPath = decodedDefaultOutputPath(cfg.input);
+    }
+
+    if (!outputPath.empty()) {
         outFile.open(cfg.output, std::ios::binary);
+
         if (!outFile) {
-            std::cerr << "Cannot open output file: " << cfg.output << "\n";
+            std::cerr << "Cannot open output file: " << outputPath << "\n";
             return 1;
         }
+
         outFile.exceptions(std::ios::failbit | std::ios::badbit);
         out = &outFile;
     }

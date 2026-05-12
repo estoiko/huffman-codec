@@ -41,9 +41,9 @@ std::vector<std::filesystem::path> corruptedFiles() {
     }
 
     for (const auto& entry : std::filesystem::directory_iterator(corruptedDir)) {
-        if (!entry.is_regular_file()) continue;
-        if (entry.path().filename().string()[0] == '.') continue;
-        files.push_back(entry.path());
+        if (entry.is_regular_file() && entry.path().extension() == ".huf") {
+            files.push_back(entry.path());
+        }
     }
 
     std::sort(files.begin(), files.end());
@@ -111,7 +111,10 @@ TEST(HuffmanEncoding, BasicEncode) {
         SCOPED_TRACE(inputPath.string());
 
         const std::uintmax_t originalSize = fileSize(inputPath);
-        const auto encodedPath = std::filesystem::path(HUFFMAN_TEST_CODED_DIR) / inputPath.filename();
+        const auto encodedPath =
+            std::filesystem::path(HUFFMAN_TEST_CODED_DIR) /
+            (inputPath.filename().string() + ".huf");
+
         const auto decodedPath = std::filesystem::path(HUFFMAN_TEST_OUTPUT_DIR) / inputPath.filename();
 
         if (originalSize == 0) {
