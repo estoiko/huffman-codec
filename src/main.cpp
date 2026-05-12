@@ -211,7 +211,7 @@ int main(int argc, char* argv[]) {
     }
 
     if (!outputPath.empty()) {
-        outFile.open(cfg.output, std::ios::binary);
+        outFile.open(outputPath, std::ios::binary);
 
         if (!outFile) {
             std::cerr << "Cannot open output file: " << outputPath << "\n";
