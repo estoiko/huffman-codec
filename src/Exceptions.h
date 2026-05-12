@@ -33,4 +33,10 @@ struct CompressionIneffective : public std::exception {
     }
 };
 
+struct InvalidArchive : public std::exception {
+    const char* what() const noexcept override {
+        return "Invalid file type passed for decode";
+    }
+};
+
 #endif // EXCEPTIONS_H

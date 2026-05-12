@@ -21,9 +21,9 @@ std::vector<std::filesystem::path> inputFiles() {
     std::vector<std::filesystem::path> files;
 
     for (const auto& entry : std::filesystem::directory_iterator(HUFFMAN_TEST_INPUT_DIR)) {
-        if (entry.is_regular_file()) {
-            files.push_back(entry.path());
-        }
+        if (!entry.is_regular_file()) continue;
+        if (entry.path().filename().string()[0] == '.') continue;
+        files.push_back(entry.path());
     }
 
     std::sort(files.begin(), files.end());
@@ -41,21 +41,27 @@ std::vector<std::filesystem::path> corruptedFiles() {
     }
 
     for (const auto& entry : std::filesystem::directory_iterator(corruptedDir)) {
-        if (entry.is_regular_file()) {
-            files.push_back(entry.path());
-        }
+        if (!entry.is_regular_file()) continue;
+        if (entry.path().filename().string()[0] == '.') continue;
+        files.push_back(entry.path());
     }
 
     std::sort(files.begin(), files.end());
     return files;
 }
 
-std::vector<char> readBinaryFile(const std::filesystem::path& path) {
-    std::ifstream in(path, std::ios::binary);
-    EXPECT_TRUE(in) << "Cannot open file: " << path;
+bool filesEqual(const std::filesystem::path& a, const std::filesystem::path& b) {
+    if (std::filesystem::file_size(a) != std::filesystem::file_size(b)) {
+        return false;
+    }
 
-    return std::vector<char>(
-        std::istreambuf_iterator<char>(in),
+    std::ifstream fa(a, std::ios::binary);
+    std::ifstream fb(b, std::ios::binary);
+
+    return std::equal(
+        std::istreambuf_iterator<char>(fa),
+        std::istreambuf_iterator<char>(),
+        std::istreambuf_iterator<char>(fb),
         std::istreambuf_iterator<char>()
     );
 }
@@ -90,7 +96,7 @@ TEST(HuffmanEncoding, CorruptedFiles) {
 
         ASSERT_TRUE(in) << "Cannot open corrupted file: " << corruptedPath;
 
-        EXPECT_ANY_THROW(decodeFile(in, out));
+        EXPECT_THROW(decodeFile(in, out), InvalidArchive);
     }
 }
 
@@ -103,11 +109,11 @@ TEST(HuffmanEncoding, BasicEncode) {
     for (const auto& inputPath : files) {
         SCOPED_TRACE(inputPath.string());
 
-        const auto original = readBinaryFile(inputPath);
+        const std::uintmax_t originalSize = fileSize(inputPath);
         const auto encodedPath = std::filesystem::path(HUFFMAN_TEST_CODED_DIR) / inputPath.filename();
         const auto decodedPath = std::filesystem::path(HUFFMAN_TEST_OUTPUT_DIR) / inputPath.filename();
 
-        if (original.empty()) {
+        if (originalSize == 0) {
             std::ifstream in(inputPath, std::ios::binary);
             std::ostringstream out(std::ios::binary);
 
@@ -128,7 +134,6 @@ TEST(HuffmanEncoding, BasicEncode) {
             encodeFile(in, out);
         }
 
-        const std::uintmax_t originalSize = original.size();
         const std::uintmax_t encodedSize = fileSize(encodedPath);
 
         std::cout << inputPath.filename().string()
@@ -155,15 +160,9 @@ TEST(HuffmanEncoding, BasicEncode) {
             decodeFile(in, out);
         }
 
-        const auto decoded = readBinaryFile(decodedPath);
-        if (decoded.size() == original.size()) {
-            std::cout << " - OK\n";
-        } else {
-            std::cout << " - FAIL\n";
-        }
-
-        EXPECT_EQ(decoded.size(), original.size());
-        EXPECT_EQ(decoded, original);
+        const bool equal = filesEqual(inputPath, decodedPath);
+        std::cout << (equal ? " - OK\n" : " - FAIL\n");
+        EXPECT_TRUE(equal);
     }
 }
 
@@ -212,7 +211,7 @@ TEST(HuffmanEncoding, CarefulEncode) {
     for (const auto& inputPath : effectiveFiles) {
         SCOPED_TRACE(inputPath.string());
 
-        const auto original = readBinaryFile(inputPath);
+        const std::uintmax_t originalSize = fileSize(inputPath);
         const auto encodedPath = workDir / (inputPath.filename().string() + ".careful.huf");
         const auto decodedPath = workDir / (inputPath.filename().string() + ".careful.decoded");
 
@@ -225,7 +224,7 @@ TEST(HuffmanEncoding, CarefulEncode) {
             EXPECT_NO_THROW(carefulEncodeFile(in, out));
         }
 
-        ASSERT_LT(fileSize(encodedPath), original.size());
+        ASSERT_LT(fileSize(encodedPath), originalSize);
 
         {
             std::ifstream in(encodedPath, std::ios::binary);
@@ -236,6 +235,6 @@ TEST(HuffmanEncoding, CarefulEncode) {
             decodeFile(in, out);
         }
 
-        EXPECT_EQ(readBinaryFile(decodedPath), original);
+        EXPECT_TRUE(filesEqual(inputPath, decodedPath));
     }
 }
