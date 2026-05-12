@@ -74,6 +74,7 @@ std::uintmax_t fileSize(const std::filesystem::path& path) {
 }
 
 void prepareArtifactDirs() {
+    std::error_code ec;
     std::filesystem::remove_all(HUFFMAN_TEST_CODED_DIR);
     std::filesystem::remove_all(HUFFMAN_TEST_OUTPUT_DIR);
     std::filesystem::create_directories(HUFFMAN_TEST_CODED_DIR);

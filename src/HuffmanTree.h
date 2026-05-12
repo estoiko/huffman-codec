@@ -41,9 +41,20 @@ private:
         generateCodes(node->right, acc + "1", codes);
     }
 
+    void deleteNode(Node* node) {
+        if (!node) return;
+        deleteNode(node->left);
+        deleteNode(node->right);
+        delete node;
+    }
+
     Node* root_;
 
 public:
+    ~HuffmanTree() {
+        deleteNode(root_);
+    }
+
     HuffmanTree(const HuffmanTree&) = delete;
     HuffmanTree& operator=(const HuffmanTree&) = delete;
 

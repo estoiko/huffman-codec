@@ -198,16 +198,14 @@ int main(int argc, char* argv[]) {
             default:
                 return 1;
         }
-    }
-    catch (const CompressionIneffective& e) {
+    } catch (const CompressionIneffective& e) {
         if (cfg.output) {
             outFile.close();
             std::filesystem::remove(cfg.output);
         }
         std::cerr << e.what() << "\n";
         return 1;
-    }
-    catch (const std::exception& e) {
+    } catch (const std::exception& e) {
         std::cerr << e.what() << "\n";
         return 1;
     }
