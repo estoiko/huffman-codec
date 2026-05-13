@@ -96,6 +96,10 @@ bool HuffmanTree::Cursor::isLeaf() const {
     return current_->isLeaf();
 }
 
+bool HuffmanTree::Cursor::isRoot() const {
+    return current_ == tree_.root_;
+}
+
 unsigned char HuffmanTree::Cursor::symbol() const {
     return static_cast<unsigned char>(current_->symbol);
 }

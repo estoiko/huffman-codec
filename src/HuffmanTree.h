@@ -38,6 +38,7 @@ public:
         void reset();
         void move(int bit);
         bool isLeaf() const;
+        bool isRoot() const;
         unsigned char symbol() const;
     };
 

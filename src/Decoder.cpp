@@ -3,11 +3,16 @@
 #include "HuffmanTree.h"
 #include <cstdint>
 
+struct HeaderInfo {
+    std::streampos headerStart;
+    uint16_t headerSize;
+};
+
 void readHeader(std::istream& in, int freq[256], int& lastBits) {
     uint16_t count;
     in.read(reinterpret_cast<char*>(&count), sizeof(count));
 
-    if (count > 256) {
+    if (count > 256 || count == 0) {
         throw InvalidArchive();
     }
 
@@ -32,9 +37,13 @@ void readHeader(std::istream& in, int freq[256], int& lastBits) {
     }
 }
 
-std::pair<std::streampos, uint16_t> extractHeader(std::istream& in, int freq[256], int& lastBits) {
+HeaderInfo extractHeader(std::istream& in, int freq[256], int& lastBits) {
     in.seekg(0, std::ios::end);
     const std::streampos fileEnd = in.tellg();
+
+    if (fileEnd < static_cast<std::streamoff>(sizeof(uint16_t))) {
+        throw InvalidArchive();
+    }
 
     uint16_t headerSize;
     in.seekg(fileEnd - static_cast<std::streamoff>(sizeof(headerSize)));
@@ -55,14 +64,14 @@ std::pair<std::streampos, uint16_t> extractHeader(std::istream& in, int freq[256
     const auto headerTotalSize = static_cast<std::streamoff>(headerSize)
                            + static_cast<std::streamoff>(sizeof(headerSize));
 
-    if (encodedFileSize < 10 || headerTotalSize >= encodedFileSize) {
+    if (headerTotalSize >= encodedFileSize) {
         throw InvalidArchive();
     }
 
     in.seekg(headerStart);
     readHeader(in, freq, lastBits);
 
-    return { headerStart, headerSize };
+    return HeaderInfo{ headerStart, headerSize };
 }
 
 void decodeFile(std::istream& in, std::ostream& out) {
@@ -71,9 +80,16 @@ void decodeFile(std::istream& in, std::ostream& out) {
 
     auto [headerStart, headerSize] = extractHeader(in, freq, lastBits);
 
+    const uint64_t totalBytes = static_cast<uint64_t>(headerStart);
+    const uint64_t totalBits = (totalBytes - 1) * 8 + static_cast<uint64_t>(lastBits);
+
+    if (totalBytes == 0) {
+        throw InvalidArchive();
+    }
+
     int symbolCount = 0;
     int onlySymbol = 0;
-    int originalSize = 0;
+    uint64_t originalSize = 0;
     for (int i = 0; i < 256; ++i) {
         if (freq[i] > 0) {
             ++symbolCount;
@@ -91,23 +107,37 @@ void decodeFile(std::istream& in, std::ostream& out) {
     }
 
     if (symbolCount == 1) {
-        for (int i = 0; i < originalSize; ++i) {
+        if (totalBits != originalSize) {
+            throw InvalidArchive();
+        }
+
+        in.clear();
+        in.seekg(0);
+
+        if (!in) {
+            throw InvalidArchive();
+        }
+
+        BitReader br(in);
+
+        for (uint64_t i = 0; i < totalBits; ++i) {
+            int bit = br.readBit();
+
+            if (bit != 0) {
+                throw InvalidArchive();
+            }
+        }
+
+        for (uint64_t i = 0; i < originalSize; ++i) {
             out.put(static_cast<char>(onlySymbol));
         }
+
         return;
     }
 
     HuffmanTree tree(freq);
 
-    const uint64_t totalBytes = static_cast<uint64_t>(headerStart);
-
-    if (totalBytes == 0) {
-        throw InvalidArchive();
-    }
-
     in.seekg(0);
-
-    const uint64_t totalBits = (totalBytes - 1) * 8 + static_cast<uint64_t>(lastBits);
 
     BitReader br(in);
 
@@ -127,7 +157,7 @@ void decodeFile(std::istream& in, std::ostream& out) {
         }
     }
 
-    if (decodedSymCount != static_cast<uint64_t>(originalSize)) {
+    if (decodedSymCount != static_cast<uint64_t>(originalSize) || !cursor.isRoot()) {
         throw InvalidArchive();
     }
 }

@@ -240,10 +240,15 @@ int main(int argc, char* argv[]) {
                 return 1;
         }
     } catch (const CompressionIneffective& e) {
-        if (cfg.output) {
+        if (outFile.is_open()) {
             outFile.close();
-            std::filesystem::remove(cfg.output);
         }
+
+        if (!outputPath.empty()) {
+            std::error_code ec;
+            std::filesystem::remove(outputPath, ec);
+        }
+
         std::cerr << e.what() << "\n";
         return 1;
     } catch (const std::exception& e) {
