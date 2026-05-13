@@ -8,13 +8,9 @@
 #include <concepts>
 #include "Exceptions.h"
 
-template <typename T, typename Compare = std::less<T>>
-requires std::totally_ordered<T> ||
-requires(T a, T b, Compare c) { { c(a, b) } -> std::convertible_to<bool>; }
+template <typename T>
 class Queue {
 private:
-    Compare comp;
-
     struct Node {
         T data_;
         Node* next_;
@@ -24,10 +20,68 @@ private:
     Node* tail_;
     std::size_t current_size_;
 
+    static Node* split(Node* source) {
+        if (source == nullptr || source->next_ == nullptr) {
+            return nullptr;
+        }
+
+        Node* slow = source;
+        Node* fast = source->next_;
+
+        while (fast != nullptr && fast->next_ != nullptr) {
+            slow = slow->next_;
+            fast = fast->next_->next_;
+        }
+
+        Node* second = slow->next_;
+        slow->next_ = nullptr;
+
+        return second;
+    }
+
+    template<typename Comp>
+    Node* merge(Node* left, Node* right, Comp comp) {
+        if (left == nullptr) return right;
+        if (right == nullptr) return left;
+
+        if (!comp(right->data_, left->data_)) {
+            left->next_ = merge(left->next_, right, comp);
+            return left;
+        }
+
+        right->next_ = merge(left, right->next_, comp);
+        return right;
+    }
+
+    template<typename Comp>
+    Node* mergeSort(Node* node, Comp comp) {
+        if (node == nullptr || node->next_ == nullptr) {
+            return node;
+        }
+
+        Node* second = split(node);
+
+        node = mergeSort(node, comp);
+        second = mergeSort(second, comp);
+
+        return merge(node, second, comp);
+    }
+
+    void refreshTail() {
+        tail_ = head_;
+
+        if (tail_ == nullptr) {
+            return;
+        }
+
+        while (tail_->next_ != nullptr) {
+            tail_ = tail_->next_;
+        }
+    }
+
 public:
     Queue()
-        : comp(Compare())
-        , head_(nullptr)
+        : head_(nullptr)
         , tail_(nullptr)
         , current_size_(0)
     {}
@@ -62,65 +116,9 @@ public:
         ++current_size_;
     }
 
-    static Node* split(Node* source) {
-        if (source == nullptr || source->next_ == nullptr) {
-            return nullptr;
-        }
-
-        Node* slow = source;
-        Node* fast = source->next_;
-
-        while (fast != nullptr && fast->next_ != nullptr) {
-            slow = slow->next_;
-            fast = fast->next_->next_;
-        }
-
-        Node* second = slow->next_;
-        slow->next_ = nullptr;
-
-        return second;
-    }
-
-    Node* merge(Node* left, Node* right) {
-        if (left == nullptr) return right;
-        if (right == nullptr) return left;
-
-        if (!comp(right->data_, left->data_)) {
-            left->next_ = merge(left->next_, right);
-            return left;
-        }
-
-        right->next_ = merge(left, right->next_);
-        return right;
-    }
-
-    Node* mergeSort(Node* node) {
-        if (node == nullptr || node->next_ == nullptr) {
-            return node;
-        }
-
-        Node* second = split(node);
-
-        node = mergeSort(node);
-        second = mergeSort(second);
-
-        return merge(node, second);
-    }
-
-    void refreshTail() {
-        tail_ = head_;
-
-        if (tail_ == nullptr) {
-            return;
-        }
-
-        while (tail_->next_ != nullptr) {
-            tail_ = tail_->next_;
-        }
-    }
-
-    void sort() {
-        head_ = mergeSort(head_);
+    template<typename Comp>
+    void sort(Comp comp) {
+        head_ = mergeSort(head_, comp);
         refreshTail();
     }
 
@@ -158,29 +156,17 @@ public:
     std::size_t size() const {
         return current_size_;
     }
-
-    Compare get_comp() const {
-        return comp;
-    }
 };
 
-template <typename T, typename Compare>
-T popMin(Queue<T, Compare>& q1, Queue<T, Compare>& q2) {
+template <typename T, typename Comp>
+T popMin(Queue<T>& q1, Queue<T>& q2, Comp comp) {
     if (q1.isEmpty()) return q2.pop();
     if (q2.isEmpty()) return q1.pop();
 
-    Compare comp = q1.get_comp();
-
-    if constexpr (std::is_pointer_v<T>) {
-        if constexpr (std::is_same_v<Compare, std::less<T>>) {
-            if (*q1.front() < *q2.front()) return q1.pop();
-            return q2.pop();
-        }
-    }
-
-    if (comp(q1.front(), q2.front())) {
+    if (!comp(q2.front(), q1.front())) {
         return q1.pop();
     }
+
     return q2.pop();
 }
 

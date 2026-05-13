@@ -61,7 +61,8 @@ public:
     explicit HuffmanTree(const int freq[256])
         : root_(nullptr)
     {
-        Queue<Node*, NodePtrLess> q1, q2;
+        Queue<Node*> q1, q2;
+        NodePtrLess comp;
 
         for (int i = 0; i < 256; ++i) {
             if (freq[i] > 0) {
@@ -73,11 +74,11 @@ public:
             throw EmptyInputFile();
         }
 
-        q1.sort();
+        q1.sort(comp);
 
         while (q1.size() + q2.size() > 1) {
-            Node* left = popMin(q1, q2);
-            Node* right = popMin(q1, q2);
+            Node* left = popMin(q1, q2, comp);
+            Node* right = popMin(q1, q2, comp);
 
             Node* parent = new Node { 0, left->freq + right->freq, left, right };
             q2.push(parent);
