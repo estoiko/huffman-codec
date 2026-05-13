@@ -1,4 +1,5 @@
 #include "Encoder.h"
+#include "Exceptions.h"
 #include <cstdint>
 
 void countFreq(std::istream& in, int freq[256]) {
