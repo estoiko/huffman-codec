@@ -21,6 +21,11 @@ void readHeader(std::istream& in, int freq[256], int& lastBits) {
         uint32_t symbolFreq;
         in.read(reinterpret_cast<char*>(&sym), 1);
         in.read(reinterpret_cast<char*>(&symbolFreq), sizeof(symbolFreq));
+
+        if (!in) {
+            throw InvalidArchive();
+        }
+
         freq[sym] = static_cast<int>(symbolFreq);
 
         if (freq[sym] == 0) {
@@ -49,16 +54,16 @@ HeaderInfo extractHeader(std::istream& in, int freq[256], int& lastBits) {
     in.seekg(fileEnd - static_cast<std::streamoff>(sizeof(headerSize)));
     in.read(reinterpret_cast<char*>(&headerSize), sizeof(headerSize));
 
-    const std::streampos headerStart =
-        fileEnd
-        - static_cast<std::streamoff>(sizeof(headerSize))
-        - static_cast<std::streamoff>(headerSize);
-
     if (static_cast<std::streamoff>(headerSize)
         + static_cast<std::streamoff>(sizeof(headerSize))
         >= static_cast<std::streamoff>(fileEnd)) {
         throw InvalidArchive();
     }
+
+    const std::streampos headerStart =
+        fileEnd
+        - static_cast<std::streamoff>(sizeof(headerSize))
+        - static_cast<std::streamoff>(headerSize);
 
     const auto encodedFileSize = static_cast<std::streamoff>(fileEnd);
     const auto headerTotalSize = static_cast<std::streamoff>(headerSize)

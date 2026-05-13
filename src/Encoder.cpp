@@ -30,7 +30,7 @@ void writeHeader(std::ostream& out, int freq[256], int lastBits) {
     out.write(reinterpret_cast<const char*>(&storedLastBits), sizeof(storedLastBits));
 }
 
-const std::streampos emplaceHeader(std::ostream& out, int freq[256], int lastBits) {
+std::streampos emplaceHeader(std::ostream& out, int freq[256], int lastBits) {
     const std::streampos headerStart = out.tellp();
     writeHeader(out, freq, lastBits);
     const std::streampos headerEnd = out.tellp();
@@ -89,10 +89,10 @@ void carefulEncodeFile(std::istream& in, std::ostream& out) {
     in.seekg(0);
 
     uint64_t totalBits = 0;
-    char c;
-
-    while (in.get(c)) {
-        totalBits += codes[static_cast<unsigned char>(c)].size();
+    for (int i = 0; i < 256; ++i) {
+        if (freq[i] > 0) {
+            totalBits += static_cast<uint64_t>(freq[i]) * codes[i].size();
+        }
     }
 
     const uint64_t bodySize = (totalBits + 7) / 8;
@@ -111,6 +111,7 @@ void carefulEncodeFile(std::istream& in, std::ostream& out) {
 
     BitWriter bw(out);
 
+    char c;
     while (in.get(c)) {
         for (unsigned char bit : codes[static_cast<unsigned char>(c)]) {
             bw.writeBit(bit - '0');
