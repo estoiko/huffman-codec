@@ -1,5 +1,6 @@
 #include "Encoder.h"
 #include "Exceptions.h"
+#include "HuffmanCode.h"
 #include <cstdint>
 
 void countFreq(std::istream& in, int freq[256]) {
@@ -46,7 +47,7 @@ void encodeFile(std::istream& in, std::ostream& out) {
 
     HuffmanTree tree(freq);
 
-    std::string codes[256];
+    HuffmanCode codes[256];
     tree.generateCodes(codes);
 
     in.clear();
@@ -72,7 +73,7 @@ void carefulEncodeFile(std::istream& in, std::ostream& out) {
 
     HuffmanTree tree(freq);
 
-    std::string codes[256];
+    HuffmanCode codes[256];
     tree.generateCodes(codes);
 
     uint64_t originalSize = 0;

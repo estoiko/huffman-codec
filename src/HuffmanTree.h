@@ -5,12 +5,14 @@
 #include <ios>
 #include <ostream>
 
+#include "HuffmanCode.h"
+
 class HuffmanTree {
 private:
     struct Node;
     struct NodePtrLess;
 
-    void generateCodes(Node* node, std::string acc, std::string codes[256]) const;
+    void generateCodes(Node* node, HuffmanCode acc, HuffmanCode codes[256]) const;
     void deleteNode(Node* node);
 
     Node* root_;
@@ -22,7 +24,7 @@ public:
     HuffmanTree(const HuffmanTree&) = delete;
     HuffmanTree& operator=(const HuffmanTree&) = delete;
 
-    void generateCodes(std::string codes[256]) const;
+    void generateCodes(HuffmanCode codes[256]) const;
 
     friend std::ostream& operator<<(std::ostream& out, const Node& node);
 

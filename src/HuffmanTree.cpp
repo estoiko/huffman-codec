@@ -1,4 +1,5 @@
 #include "HuffmanTree.h"
+#include "HuffmanCode.h"
 #include "Queue.h"
 
 struct HuffmanTree::Node {
@@ -23,18 +24,19 @@ struct HuffmanTree::NodePtrLess {
     }
 };
 
-void HuffmanTree::generateCodes(Node* node, std::string acc, std::string codes[256]) const {
+void HuffmanTree::generateCodes(Node* node, HuffmanCode acc, HuffmanCode codes[256]) const {
     if (!node) return;
     if (node->isLeaf()) {
-        codes[node->symbol] = acc.empty() ? "0" : acc;
+        codes[node->symbol] = acc.empty() ? (HuffmanCode('0')) : acc;
         return;
     }
-    generateCodes(node->left, acc + "0", codes);
-    generateCodes(node->right, acc + "1", codes);
+
+    generateCodes(node->left, acc + '0', codes);
+    generateCodes(node->right, acc + '1', codes);
 }
 
-void HuffmanTree::generateCodes(std::string codes[256]) const {
-    generateCodes(root_, "", codes);
+void HuffmanTree::generateCodes(HuffmanCode codes[256]) const {
+    generateCodes(root_, HuffmanCode{}, codes);
 }
 
 void HuffmanTree::deleteNode(Node* node) {
