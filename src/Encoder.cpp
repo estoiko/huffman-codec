@@ -41,33 +41,7 @@ std::streampos emplaceHeader(std::ostream& out, int freq[256], int lastBits) {
     return headerStart;
 }
 
-void encodeFile(std::istream& in, std::ostream& out) {
-    int freq[256] {};
-    countFreq(in, freq);
-
-    HuffmanTree tree(freq);
-
-    HuffmanCode codes[256];
-    tree.generateCodes(codes);
-
-    in.clear();
-    in.seekg(0);
-
-    BitWriter bw(out);
-
-    char c;
-    while (in.get(c)) {
-        for (unsigned char bit : codes[static_cast<unsigned char>(c)]) {
-            bw.writeBit(bit - '0');
-        }
-    }
-
-    int lastBits = bw.flush();
-
-    emplaceHeader(out, freq, lastBits);
-}
-
-void carefulEncodeFile(std::istream& in, std::ostream& out) {
+void encodeFile(std::istream& in, std::ostream& out, bool force) {
     int freq[256] {};
     countFreq(in, freq);
 
@@ -78,31 +52,24 @@ void carefulEncodeFile(std::istream& in, std::ostream& out) {
 
     uint64_t originalSize = 0;
     uint16_t uniqueCount = 0;
+    uint64_t compressedSize = 0;
     for (int i = 0; i < 256; ++i) {
         if (freq[i] > 0) {
             originalSize += static_cast<uint64_t>(freq[i]);
             ++uniqueCount;
+
+            compressedSize += static_cast<uint64_t>(freq[i]) * codes[i].size();
         }
     }
 
-    in.clear();
-    in.seekg(0);
-
-    uint64_t totalBits = 0;
-    for (int i = 0; i < 256; ++i) {
-        if (freq[i] > 0) {
-            totalBits += static_cast<uint64_t>(freq[i]) * codes[i].size();
-        }
-    }
-
-    const uint64_t bodySize = (totalBits + 7) / 8;
+    compressedSize = (compressedSize + 7) / 8;
     const uint64_t headerSize =
         sizeof(uint16_t)
         + static_cast<uint64_t>(uniqueCount) * (sizeof(uint8_t) + sizeof(uint32_t))
         + sizeof(uint8_t);
-    const uint64_t archiveSize = bodySize + headerSize + sizeof(uint16_t);
+    const uint64_t archiveSize = compressedSize + headerSize + sizeof(uint16_t);
 
-    if (archiveSize >= originalSize) {
+    if (archiveSize >= originalSize && !force) {
         throw CompressionIneffective();
     }
 

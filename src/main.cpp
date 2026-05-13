@@ -107,6 +107,7 @@ struct Config {
     const char* input = nullptr;
     const char* output = nullptr;
     bool help = false;
+    bool force = false;
 };
 
 bool parseArgs(int argc, char* argv[], Config& cfg) {
@@ -131,12 +132,9 @@ bool parseArgs(int argc, char* argv[], Config& cfg) {
             if (cfg.mode != Mode::None) return false;
             cfg.mode = Mode::Decode;
         }
-        else if (strcmp(arg, "-c") == 0) {
-            if (cfg.mode != Mode::None) return false;
-            cfg.mode = Mode::EncodeCareful;
+        else if (strcmp(arg, "-f") == 0 || strcmp(arg, "--force") == 0) {
+            cfg.force = true;
         }
-
-        // output
         else if (strcmp(arg, "-o") == 0) {
             if (i + 1 >= argc) return false;
             cfg.output = argv[++i];
@@ -221,15 +219,11 @@ int main(int argc, char* argv[]) {
     try {
         switch (cfg.mode) {
             case Mode::Encode:
-                encodeFile(in, *out);
+                encodeFile(in, *out, cfg.force);
                 break;
 
             case Mode::Decode:
                 decodeFile(in, *out);
-                break;
-
-            case Mode::EncodeCareful:
-                carefulEncodeFile(in, *out);
                 break;
 
             default:

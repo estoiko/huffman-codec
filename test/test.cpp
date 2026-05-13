@@ -101,6 +101,37 @@ TEST(HuffmanEncoding, CorruptedFiles) {
     }
 }
 
+TEST(HuffmanEncoding, IneffectiveCompressionThrow) {
+    const std::filesystem::path emptyPath = std::filesystem::path(HUFFMAN_TEST_INPUT_DIR) / "empty.txt";
+    const std::filesystem::path onePath = std::filesystem::path(HUFFMAN_TEST_INPUT_DIR) / "one_character.txt";
+    const std::filesystem::path repeatedPath =
+        std::filesystem::path(HUFFMAN_TEST_INPUT_DIR) / "one_character_repeated.txt";
+
+    {
+        std::ifstream in(emptyPath, std::ios::binary);
+        std::ostringstream out(std::ios::binary);
+
+        ASSERT_TRUE(in);
+        EXPECT_THROW(encodeFile(in, out), EmptyInputFile);
+    }
+
+    {
+        std::ifstream in(onePath, std::ios::binary);
+        std::ostringstream out(std::ios::binary);
+
+        ASSERT_TRUE(in);
+        EXPECT_THROW(encodeFile(in, out), CompressionIneffective);
+    }
+
+    {
+        std::ifstream in(repeatedPath, std::ios::binary);
+        std::ostringstream out(std::ios::binary);
+
+        ASSERT_TRUE(in);
+        EXPECT_THROW(encodeFile(in, out), CompressionIneffective);
+    }
+}
+
 TEST(HuffmanEncoding, BasicEncode) {
     prepareArtifactDirs();
 
@@ -128,6 +159,8 @@ TEST(HuffmanEncoding, BasicEncode) {
             continue;
         }
 
+        bool wasEncoded = false;
+
         {
             std::ifstream in(inputPath, std::ios::binary);
             std::ofstream out(encodedPath, std::ios::binary);
@@ -135,7 +168,17 @@ TEST(HuffmanEncoding, BasicEncode) {
             ASSERT_TRUE(in) << "Cannot open input file: " << inputPath;
             ASSERT_TRUE(out) << "Cannot open encoded output file: " << encodedPath;
 
-            encodeFile(in, out);
+            try {
+                encodeFile(in, out);
+                wasEncoded = true;
+            } catch (const CompressionIneffective&) {
+                std::cout << inputPath.filename().string()
+                          << ": compression ineffective, skipping decode check.\n";
+            }
+        }
+
+        if (!wasEncoded) {
+            continue; // Идем к следующему файлу, если этот сжался неэффективно
         }
 
         const std::uintmax_t encodedSize = fileSize(encodedPath);
@@ -167,78 +210,5 @@ TEST(HuffmanEncoding, BasicEncode) {
         const bool equal = filesEqual(inputPath, decodedPath);
         std::cout << (equal ? " - OK\n" : " - FAIL\n");
         EXPECT_TRUE(equal);
-    }
-}
-
-TEST(HuffmanEncoding, CarefulEncodeSkip) {
-    const std::filesystem::path emptyPath = std::filesystem::path(HUFFMAN_TEST_INPUT_DIR) / "empty.txt";
-    const std::filesystem::path onePath = std::filesystem::path(HUFFMAN_TEST_INPUT_DIR) / "one_character.txt";
-    const std::filesystem::path repeatedPath =
-        std::filesystem::path(HUFFMAN_TEST_INPUT_DIR) / "one_character_repeated.txt";
-
-    {
-        std::ifstream in(emptyPath, std::ios::binary);
-        std::ostringstream out(std::ios::binary);
-
-        ASSERT_TRUE(in);
-        EXPECT_THROW(carefulEncodeFile(in, out), EmptyInputFile);
-    }
-
-    {
-        std::ifstream in(onePath, std::ios::binary);
-        std::ostringstream out(std::ios::binary);
-
-        ASSERT_TRUE(in);
-        EXPECT_THROW(carefulEncodeFile(in, out), CompressionIneffective);
-    }
-
-    {
-        std::ifstream in(repeatedPath, std::ios::binary);
-        std::ostringstream out(std::ios::binary);
-
-        ASSERT_TRUE(in);
-        EXPECT_THROW(carefulEncodeFile(in, out), CompressionIneffective);
-    }
-}
-
-TEST(HuffmanEncoding, CarefulEncode) {
-    const std::vector<std::filesystem::path> effectiveFiles = {
-        std::filesystem::path(HUFFMAN_TEST_INPUT_DIR) / "big.txt",
-        std::filesystem::path(HUFFMAN_TEST_INPUT_DIR) / "english-lorem.txt",
-        std::filesystem::path(HUFFMAN_TEST_INPUT_DIR) / "russian-lorem.txt",
-        std::filesystem::path(HUFFMAN_TEST_INPUT_DIR) / "utf8-demo.txt",
-    };
-
-    const auto workDir = std::filesystem::temp_directory_path() / "huffman_encoding_careful_tests";
-    std::filesystem::create_directories(workDir);
-
-    for (const auto& inputPath : effectiveFiles) {
-        SCOPED_TRACE(inputPath.string());
-
-        const std::uintmax_t originalSize = fileSize(inputPath);
-        const auto encodedPath = workDir / (inputPath.filename().string() + ".careful.huf");
-        const auto decodedPath = workDir / (inputPath.filename().string() + ".careful.decoded");
-
-        {
-            std::ifstream in(inputPath, std::ios::binary);
-            std::ofstream out(encodedPath, std::ios::binary);
-
-            ASSERT_TRUE(in);
-            ASSERT_TRUE(out);
-            EXPECT_NO_THROW(carefulEncodeFile(in, out));
-        }
-
-        ASSERT_LT(fileSize(encodedPath), originalSize);
-
-        {
-            std::ifstream in(encodedPath, std::ios::binary);
-            std::ofstream out(decodedPath, std::ios::binary);
-
-            ASSERT_TRUE(in);
-            ASSERT_TRUE(out);
-            decodeFile(in, out);
-        }
-
-        EXPECT_TRUE(filesEqual(inputPath, decodedPath));
     }
 }
