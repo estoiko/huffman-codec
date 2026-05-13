@@ -25,11 +25,13 @@ DESCRIPTION
     Exactly one mode must be specified:
         -e    encode input file
         -d    decode input file
-        -c    encode only if result is smaller than input
 
     INPUT is a path to the input file.
 
-    If -o is not specified, output is written to standard output.
+    If -o is not specified, the output file is generated automatically
+    in the same directory:
+        * Encoding appends '.huf' to the input filename.
+        * Decoding removes '.huf' from the input filename.
 
 OPTIONS
     -e
@@ -38,38 +40,31 @@ OPTIONS
     -d
         Decode INPUT from compressed form.
 
-    -c
-        Encode INPUT only if compressed size is smaller than original.
-        Otherwise no output file is produced.
-
     -o OUTPUT
-        Write result to OUTPUT file instead of standard output.
+        Write result to OUTPUT file instead of generating the name automatically.
 
     --help
         Display this help and exit.
 
 BEHAVIOR
-    - Only one of -e, -d, -c can be used at a time.
+    - Only one of -e or -d can be used at a time.
     - If multiple modes are provided, the program exits with error.
     - If INPUT is missing, the program exits with error.
-    - If OUTPUT is not specified, result is written to stdout.
+    - Decoding requires the input file to have a '.huf' extension.
 
 EXIT STATUS
     0    success
     1    invalid arguments or runtime error
 
 EXAMPLES
-    Encode file:
-        huff -e input.txt -o output.huff
-
-    Decode file:
-        huff -d output.huff -o restored.txt
-
-    Encode only if beneficial:
-        huff -c input.txt -o output.huff
-
-    Write to stdout:
+    Encode file (creates input.txt.huf):
         huff -e input.txt
+
+    Decode file (creates restored.txt):
+        huff -d archive.huf -o restored.txt
+
+    Decode file automatically (creates archive):
+        huff -d archive.huf
 
 NOTES
     This is a simple implementation of Huffman coding.
@@ -77,6 +72,7 @@ NOTES
 
 )";
 }
+
 
 enum class Mode {
     None,
