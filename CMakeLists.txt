@@ -24,7 +24,7 @@ add_library(huffman_core STATIC
   src/Decoder.h
   src/HuffmanTree.cpp
   src/HuffmanTree.h
-  src/PriorityQueue.h
+  src/Queue.h
   src/Exceptions.h
 )
 

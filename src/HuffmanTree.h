@@ -5,7 +5,7 @@
 #include <ios>
 #include <ostream>
 
-#include "PriorityQueue.h"
+#include "Queue.h"
 
 class HuffmanTree {
 private:
@@ -61,7 +61,7 @@ public:
     explicit HuffmanTree(const int freq[256])
         : root_(nullptr)
     {
-        PriorityQueue<Node*, NodePtrLess> q1, q2;
+        Queue<Node*, NodePtrLess> q1, q2;
 
         for (int i = 0; i < 256; ++i) {
             if (freq[i] > 0) {
@@ -72,6 +72,8 @@ public:
         if (q1.isEmpty()) {
             throw EmptyInputFile();
         }
+
+        q1.sort();
 
         while (q1.size() + q2.size() > 1) {
             Node* left = popMin(q1, q2);

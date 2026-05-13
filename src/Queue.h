@@ -1,5 +1,5 @@
-#ifndef PRIORITYQUEUE_H
-#define PRIORITYQUEUE_H
+#ifndef QUEUE_H
+#define QUEUE_H
 
 #include <cstddef>
 #include <functional>
@@ -11,7 +11,7 @@
 template <typename T, typename Compare = std::less<T>>
 requires std::totally_ordered<T> ||
 requires(T a, T b, Compare c) { { c(a, b) } -> std::convertible_to<bool>; }
-class PriorityQueue {
+class Queue {
 private:
     Compare comp;
 
@@ -25,14 +25,14 @@ private:
     std::size_t current_size_;
 
 public:
-    PriorityQueue()
+    Queue()
         : comp(Compare())
         , head_(nullptr)
         , tail_(nullptr)
         , current_size_(0)
     {}
 
-    ~PriorityQueue() {
+    ~Queue() {
         while (head_ != nullptr) {
             Node* next = head_->next_;
             delete head_;
@@ -42,33 +42,86 @@ public:
         current_size_ = 0;
     }
 
-    PriorityQueue(const PriorityQueue<T>& other) = delete;
-    PriorityQueue(PriorityQueue<T>&& other) noexcept = delete;
-    PriorityQueue<T>& operator=(const PriorityQueue<T>& other) = delete;
-    PriorityQueue<T>& operator=(PriorityQueue<T>&& other) noexcept = delete;
+    Queue(const Queue<T>& other) = delete;
+    Queue(Queue<T>&& other) noexcept = delete;
+    Queue<T>& operator=(const Queue<T>& other) = delete;
+    Queue<T>& operator=(Queue<T>&& other) noexcept = delete;
 
     void push(const T& e) {
         Node* new_node = new Node {e, nullptr};
 
-        if (isEmpty() || comp(e, head_->data_)) {
+        if (isEmpty()) {
             new_node->next_ = head_;
             head_ = new_node;
             if (tail_ == nullptr) tail_ = head_;
         } else {
-            Node* current = head_;
-            while (current->next_ != nullptr && !comp(e, current->next_->data_)) {
-                current = current->next_;
-            }
-
-            new_node->next_ = current->next_;
-            current->next_ = new_node;
-
-            if (new_node->next_ == nullptr) {
-                tail_ = new_node;
-            }
+            tail_->next_ = new_node;
+            tail_ = new_node;
         }
 
         ++current_size_;
+    }
+
+    static Node* split(Node* source) {
+        if (source == nullptr || source->next_ == nullptr) {
+            return nullptr;
+        }
+
+        Node* slow = source;
+        Node* fast = source->next_;
+
+        while (fast != nullptr && fast->next_ != nullptr) {
+            slow = slow->next_;
+            fast = fast->next_->next_;
+        }
+
+        Node* second = slow->next_;
+        slow->next_ = nullptr;
+
+        return second;
+    }
+
+    Node* merge(Node* left, Node* right) {
+        if (left == nullptr) return right;
+        if (right == nullptr) return left;
+
+        if (!comp(right->data_, left->data_)) {
+            left->next_ = merge(left->next_, right);
+            return left;
+        }
+
+        right->next_ = merge(left, right->next_);
+        return right;
+    }
+
+    Node* mergeSort(Node* node) {
+        if (node == nullptr || node->next_ == nullptr) {
+            return node;
+        }
+
+        Node* second = split(node);
+
+        node = mergeSort(node);
+        second = mergeSort(second);
+
+        return merge(node, second);
+    }
+
+    void refreshTail() {
+        tail_ = head_;
+
+        if (tail_ == nullptr) {
+            return;
+        }
+
+        while (tail_->next_ != nullptr) {
+            tail_ = tail_->next_;
+        }
+    }
+
+    void sort() {
+        head_ = mergeSort(head_);
+        refreshTail();
     }
 
     T pop() {
@@ -112,7 +165,7 @@ public:
 };
 
 template <typename T, typename Compare>
-T popMin(PriorityQueue<T, Compare>& q1, PriorityQueue<T, Compare>& q2) {
+T popMin(Queue<T, Compare>& q1, Queue<T, Compare>& q2) {
     if (q1.isEmpty()) return q2.pop();
     if (q2.isEmpty()) return q1.pop();
 
