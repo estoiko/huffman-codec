@@ -34,15 +34,15 @@ target_include_directories(huffman_core PUBLIC
 
 target_compile_options(huffman_core PRIVATE ${WARNING_FLAGS})
 
-add_executable(huffman
+add_executable(huff
   src/main.cpp
 )
 
-target_link_libraries(huffman PRIVATE
+target_link_libraries(huff PRIVATE
   huffman_core
 )
 
-target_compile_options(huffman PRIVATE ${WARNING_FLAGS})
+target_compile_options(huff PRIVATE ${WARNING_FLAGS})
 
 if(BUILD_TESTING)
   find_package(GTest QUIET)

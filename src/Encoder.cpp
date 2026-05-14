@@ -10,11 +10,7 @@ void countFreq(std::istream& in, int freq[256]) {
     }
 }
 
-void writeHeader(std::ostream& out, int freq[256], int lastBits) {
-    uint16_t count = 0;
-    for (int i = 0; i < 256; ++i) {
-        if (freq[i] > 0) ++count;
-    }
+void writeHeader(std::ostream& out, int freq[256], uint16_t count, int lastBits) {
     out.write(reinterpret_cast<const char*>(&count), sizeof(count));
 
     for (int i = 0; i < 256; ++i) {
@@ -30,9 +26,9 @@ void writeHeader(std::ostream& out, int freq[256], int lastBits) {
     out.write(reinterpret_cast<const char*>(&storedLastBits), sizeof(storedLastBits));
 }
 
-std::streampos emplaceHeader(std::ostream& out, int freq[256], int lastBits) {
+std::streampos emplaceHeader(std::ostream& out, int freq[256], uint16_t count, int lastBits) {
     const std::streampos headerStart = out.tellp();
-    writeHeader(out, freq, lastBits);
+    writeHeader(out, freq, count, lastBits);
     const std::streampos headerEnd = out.tellp();
 
     const uint16_t headerSize = static_cast<uint16_t>(headerEnd - headerStart);
@@ -87,5 +83,5 @@ void encodeFile(std::istream& in, std::ostream& out, bool force) {
 
     int lastBits = bw.flush();
 
-    emplaceHeader(out, freq, lastBits);
+    emplaceHeader(out, freq, uniqueCount, lastBits);
 }

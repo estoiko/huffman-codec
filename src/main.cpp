@@ -73,17 +73,11 @@ NOTES
 )";
 }
 
-
 enum class Mode {
     None,
     Encode,
-    Decode,
-    EncodeCareful
+    Decode
 };
-
-bool isEncodeMode(Mode mode) {
-    return mode == Mode::Encode || mode == Mode::EncodeCareful;
-}
 
 bool hasHufExtension(const std::filesystem::path& path) {
     return path.extension() == ".huf";
@@ -195,10 +189,10 @@ int main(int argc, char* argv[]) {
     if (cfg.output != nullptr) {
         outputPath = cfg.output;
 
-        if (isEncodeMode(cfg.mode)) {
+        if (cfg.mode == Mode::Encode) {
             outputPath = withHufExtension(outputPath);
         }
-    } else if (isEncodeMode(cfg.mode)) {
+    } else if (cfg.mode == Mode::Encode) {
         outputPath = withHufExtension(cfg.input);
     } else if (cfg.mode == Mode::Decode) {
         outputPath = decodedDefaultOutputPath(cfg.input);
