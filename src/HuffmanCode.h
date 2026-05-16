@@ -19,11 +19,21 @@ public:
         bits[len++] = bit;
     }
 
-    bool empty() const { return len == 0; }
-    uint16_t size() const { return len; }
+    bool empty() const {
+        return len == 0;
+    }
 
-    const char* begin() const { return bits; }
-    const char* end() const { return bits + len; }
+    uint16_t size() const {
+        return len;
+    }
+
+    const char* begin() const {
+        return bits;
+    }
+
+    const char* end() const {
+        return bits + len;
+    }
 
     HuffmanCode operator+(char bit) const {
         HuffmanCode copy = *this;

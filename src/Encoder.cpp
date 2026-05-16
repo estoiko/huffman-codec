@@ -37,7 +37,7 @@ std::streampos emplaceHeader(std::ostream& out, int freq[256], uint16_t count, i
     return headerStart;
 }
 
-void encodeFile(std::istream& in, std::ostream& out, bool force) {
+FileInfo encodeFile(std::istream& in, std::ostream& out, bool force) {
     int freq[256] {};
     countFreq(in, freq);
 
@@ -84,4 +84,6 @@ void encodeFile(std::istream& in, std::ostream& out, bool force) {
     int lastBits = bw.flush();
 
     emplaceHeader(out, freq, uniqueCount, lastBits);
+
+    return FileInfo{ originalSize, archiveSize };
 }

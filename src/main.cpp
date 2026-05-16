@@ -121,15 +121,12 @@ bool parseArgs(int argc, char* argv[], Config& cfg) {
         else if (strcmp(arg, "-e") == 0) {
             if (cfg.mode != Mode::None) return false;
             cfg.mode = Mode::Encode;
-        }
-        else if (strcmp(arg, "-d") == 0) {
+        } else if (strcmp(arg, "-d") == 0) {
             if (cfg.mode != Mode::None) return false;
             cfg.mode = Mode::Decode;
-        }
-        else if (strcmp(arg, "-f") == 0 || strcmp(arg, "--force") == 0) {
+        } else if (strcmp(arg, "-f") == 0 || strcmp(arg, "--force") == 0) {
             cfg.force = true;
-        }
-        else if (strcmp(arg, "-o") == 0) {
+        } else if (strcmp(arg, "-o") == 0) {
             if (i + 1 >= argc) return false;
             cfg.output = argv[++i];
         }
