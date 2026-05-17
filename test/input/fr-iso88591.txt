@@ -1,0 +1,400 @@
+Ceci est un fichier texte français en encodage ISO-8859-1.
+
+Alphabet français avec accents:
+- Voyelles: a, e, i, o, u, y
+- Voyelles accentuées: à, á, â, ä, è, é, ê, ë, ì, í, î, ï, ò, ó, ô, ö, ù, ú, û, ü, ÿ
+- Consonnes: b, c, d, f, g, h, j, k, l, m, n, p, q, r, s, t, v, w, x, z
+- Cédille: ç
+
+Mots techniques:
+Technologie, programmation, ordinateur, internet, données
+Développement, test, débogage, optimisation, architecture
+Intelligence artificielle, apprentissage automatique, big data
+
+Exemples de phrases:
+La France est un pays situé en Europe occidentale.
+Paris est la capitale de la France.
+Le français utilise l'alphabet latin avec des accents.
+La technologie transforme notre façon de vivre.
+
+Ponctuation française:
+Guillemets: « » " "
+Signes: . , ; : ! ? ( ) [ ] { }
+Apostrophe: '
+
+Nombres:
+Chiffres: 1234567890
+Mots: un, deux, trois, quatre, cinq, six, sept, huit, neuf, dix
+Ordinaux: premier, deuxième, troisième, quatrième, cinquième
+
+Caractères spéciaux:
+Symboles monétaires: ? (euro), $ (dollar), £ (livre)
+Autres: © ® ? § ¶ ? ? ? ° ± × ÷
+
+Texte mixte:
+Hello World! - Bonjour le monde!
+Programming - Programmation
+Computer Science - Informatique
+
+Encodage du fichier: ISO-8859-1 (Latin-1)
+Heure de création: 15 janvier 2024, 15:05:00
+Ceci est un fichier texte français en encodage ISO-8859-1.
+
+Alphabet français avec accents:
+- Voyelles: a, e, i, o, u, y
+- Voyelles accentuées: à, á, â, ä, è, é, ê, ë, ì, í, î, ï, ò, ó, ô, ö, ù, ú, û, ü, ÿ
+- Consonnes: b, c, d, f, g, h, j, k, l, m, n, p, q, r, s, t, v, w, x, z
+- Cédille: ç
+
+Mots techniques:
+Technologie, programmation, ordinateur, internet, données
+Développement, test, débogage, optimisation, architecture
+Intelligence artificielle, apprentissage automatique, big data
+
+Exemples de phrases:
+La France est un pays situé en Europe occidentale.
+Paris est la capitale de la France.
+Le français utilise l'alphabet latin avec des accents.
+La technologie transforme notre façon de vivre.
+
+Ponctuation française:
+Guillemets: « » " "
+Signes: . , ; : ! ? ( ) [ ] { }
+Apostrophe: '
+
+Nombres:
+Chiffres: 1234567890
+Mots: un, deux, trois, quatre, cinq, six, sept, huit, neuf, dix
+Ordinaux: premier, deuxième, troisième, quatrième, cinquième
+
+Caractères spéciaux:
+Symboles monétaires: ? (euro), $ (dollar), £ (livre)
+Autres: © ® ? § ¶ ? ? ? ° ± × ÷
+
+Texte mixte:
+Hello World! - Bonjour le monde!
+Programming - Programmation
+Computer Science - Informatique
+
+Encodage du fichier: ISO-8859-1 (Latin-1)
+Heure de création: 15 janvier 2024, 15:05:00
+Ceci est un fichier texte français en encodage ISO-8859-1.
+
+Alphabet français avec accents:
+- Voyelles: a, e, i, o, u, y
+- Voyelles accentuées: à, á, â, ä, è, é, ê, ë, ì, í, î, ï, ò, ó, ô, ö, ù, ú, û, ü, ÿ
+- Consonnes: b, c, d, f, g, h, j, k, l, m, n, p, q, r, s, t, v, w, x, z
+- Cédille: ç
+
+Mots techniques:
+Technologie, programmation, ordinateur, internet, données
+Développement, test, débogage, optimisation, architecture
+Intelligence artificielle, apprentissage automatique, big data
+
+Exemples de phrases:
+La France est un pays situé en Europe occidentale.
+Paris est la capitale de la France.
+Le français utilise l'alphabet latin avec des accents.
+La technologie transforme notre façon de vivre.
+
+Ponctuation française:
+Guillemets: « » " "
+Signes: . , ; : ! ? ( ) [ ] { }
+Apostrophe: '
+
+Nombres:
+Chiffres: 1234567890
+Mots: un, deux, trois, quatre, cinq, six, sept, huit, neuf, dix
+Ordinaux: premier, deuxième, troisième, quatrième, cinquième
+
+Caractères spéciaux:
+Symboles monétaires: ? (euro), $ (dollar), £ (livre)
+Autres: © ® ? § ¶ ? ? ? ° ± × ÷
+
+Texte mixte:
+Hello World! - Bonjour le monde!
+Programming - Programmation
+Computer Science - Informatique
+
+Encodage du fichier: ISO-8859-1 (Latin-1)
+Heure de création: 15 janvier 2024, 15:05:00
+Ceci est un fichier texte français en encodage ISO-8859-1.
+
+Alphabet français avec accents:
+- Voyelles: a, e, i, o, u, y
+- Voyelles accentuées: à, á, â, ä, è, é, ê, ë, ì, í, î, ï, ò, ó, ô, ö, ù, ú, û, ü, ÿ
+- Consonnes: b, c, d, f, g, h, j, k, l, m, n, p, q, r, s, t, v, w, x, z
+- Cédille: ç
+
+Mots techniques:
+Technologie, programmation, ordinateur, internet, données
+Développement, test, débogage, optimisation, architecture
+Intelligence artificielle, apprentissage automatique, big data
+
+Exemples de phrases:
+La France est un pays situé en Europe occidentale.
+Paris est la capitale de la France.
+Le français utilise l'alphabet latin avec des accents.
+La technologie transforme notre façon de vivre.
+
+Ponctuation française:
+Guillemets: « » " "
+Signes: . , ; : ! ? ( ) [ ] { }
+Apostrophe: '
+
+Nombres:
+Chiffres: 1234567890
+Mots: un, deux, trois, quatre, cinq, six, sept, huit, neuf, dix
+Ordinaux: premier, deuxième, troisième, quatrième, cinquième
+
+Caractères spéciaux:
+Symboles monétaires: ? (euro), $ (dollar), £ (livre)
+Autres: © ® ? § ¶ ? ? ? ° ± × ÷
+
+Texte mixte:
+Hello World! - Bonjour le monde!
+Programming - Programmation
+Computer Science - Informatique
+
+Encodage du fichier: ISO-8859-1 (Latin-1)
+Heure de création: 15 janvier 2024, 15:05:00
+Ceci est un fichier texte français en encodage ISO-8859-1.
+
+Alphabet français avec accents:
+- Voyelles: a, e, i, o, u, y
+- Voyelles accentuées: à, á, â, ä, è, é, ê, ë, ì, í, î, ï, ò, ó, ô, ö, ù, ú, û, ü, ÿ
+- Consonnes: b, c, d, f, g, h, j, k, l, m, n, p, q, r, s, t, v, w, x, z
+- Cédille: ç
+
+Mots techniques:
+Technologie, programmation, ordinateur, internet, données
+Développement, test, débogage, optimisation, architecture
+Intelligence artificielle, apprentissage automatique, big data
+
+Exemples de phrases:
+La France est un pays situé en Europe occidentale.
+Paris est la capitale de la France.
+Le français utilise l'alphabet latin avec des accents.
+La technologie transforme notre façon de vivre.
+
+Ponctuation française:
+Guillemets: « » " "
+Signes: . , ; : ! ? ( ) [ ] { }
+Apostrophe: '
+
+Nombres:
+Chiffres: 1234567890
+Mots: un, deux, trois, quatre, cinq, six, sept, huit, neuf, dix
+Ordinaux: premier, deuxième, troisième, quatrième, cinquième
+
+Caractères spéciaux:
+Symboles monétaires: ? (euro), $ (dollar), £ (livre)
+Autres: © ® ? § ¶ ? ? ? ° ± × ÷
+
+Texte mixte:
+Hello World! - Bonjour le monde!
+Programming - Programmation
+Computer Science - Informatique
+
+Encodage du fichier: ISO-8859-1 (Latin-1)
+Heure de création: 15 janvier 2024, 15:05:00
+Ceci est un fichier texte français en encodage ISO-8859-1.
+
+Alphabet français avec accents:
+- Voyelles: a, e, i, o, u, y
+- Voyelles accentuées: à, á, â, ä, è, é, ê, ë, ì, í, î, ï, ò, ó, ô, ö, ù, ú, û, ü, ÿ
+- Consonnes: b, c, d, f, g, h, j, k, l, m, n, p, q, r, s, t, v, w, x, z
+- Cédille: ç
+
+Mots techniques:
+Technologie, programmation, ordinateur, internet, données
+Développement, test, débogage, optimisation, architecture
+Intelligence artificielle, apprentissage automatique, big data
+
+Exemples de phrases:
+La France est un pays situé en Europe occidentale.
+Paris est la capitale de la France.
+Le français utilise l'alphabet latin avec des accents.
+La technologie transforme notre façon de vivre.
+
+Ponctuation française:
+Guillemets: « » " "
+Signes: . , ; : ! ? ( ) [ ] { }
+Apostrophe: '
+
+Nombres:
+Chiffres: 1234567890
+Mots: un, deux, trois, quatre, cinq, six, sept, huit, neuf, dix
+Ordinaux: premier, deuxième, troisième, quatrième, cinquième
+
+Caractères spéciaux:
+Symboles monétaires: ? (euro), $ (dollar), £ (livre)
+Autres: © ® ? § ¶ ? ? ? ° ± × ÷
+
+Texte mixte:
+Hello World! - Bonjour le monde!
+Programming - Programmation
+Computer Science - Informatique
+
+Encodage du fichier: ISO-8859-1 (Latin-1)
+Heure de création: 15 janvier 2024, 15:05:00
+Ceci est un fichier texte français en encodage ISO-8859-1.
+
+Alphabet français avec accents:
+- Voyelles: a, e, i, o, u, y
+- Voyelles accentuées: à, á, â, ä, è, é, ê, ë, ì, í, î, ï, ò, ó, ô, ö, ù, ú, û, ü, ÿ
+- Consonnes: b, c, d, f, g, h, j, k, l, m, n, p, q, r, s, t, v, w, x, z
+- Cédille: ç
+
+Mots techniques:
+Technologie, programmation, ordinateur, internet, données
+Développement, test, débogage, optimisation, architecture
+Intelligence artificielle, apprentissage automatique, big data
+
+Exemples de phrases:
+La France est un pays situé en Europe occidentale.
+Paris est la capitale de la France.
+Le français utilise l'alphabet latin avec des accents.
+La technologie transforme notre façon de vivre.
+
+Ponctuation française:
+Guillemets: « » " "
+Signes: . , ; : ! ? ( ) [ ] { }
+Apostrophe: '
+
+Nombres:
+Chiffres: 1234567890
+Mots: un, deux, trois, quatre, cinq, six, sept, huit, neuf, dix
+Ordinaux: premier, deuxième, troisième, quatrième, cinquième
+
+Caractères spéciaux:
+Symboles monétaires: ? (euro), $ (dollar), £ (livre)
+Autres: © ® ? § ¶ ? ? ? ° ± × ÷
+
+Texte mixte:
+Hello World! - Bonjour le monde!
+Programming - Programmation
+Computer Science - Informatique
+
+Encodage du fichier: ISO-8859-1 (Latin-1)
+Heure de création: 15 janvier 2024, 15:05:00
+Ceci est un fichier texte français en encodage ISO-8859-1.
+
+Alphabet français avec accents:
+- Voyelles: a, e, i, o, u, y
+- Voyelles accentuées: à, á, â, ä, è, é, ê, ë, ì, í, î, ï, ò, ó, ô, ö, ù, ú, û, ü, ÿ
+- Consonnes: b, c, d, f, g, h, j, k, l, m, n, p, q, r, s, t, v, w, x, z
+- Cédille: ç
+
+Mots techniques:
+Technologie, programmation, ordinateur, internet, données
+Développement, test, débogage, optimisation, architecture
+Intelligence artificielle, apprentissage automatique, big data
+
+Exemples de phrases:
+La France est un pays situé en Europe occidentale.
+Paris est la capitale de la France.
+Le français utilise l'alphabet latin avec des accents.
+La technologie transforme notre façon de vivre.
+
+Ponctuation française:
+Guillemets: « » " "
+Signes: . , ; : ! ? ( ) [ ] { }
+Apostrophe: '
+
+Nombres:
+Chiffres: 1234567890
+Mots: un, deux, trois, quatre, cinq, six, sept, huit, neuf, dix
+Ordinaux: premier, deuxième, troisième, quatrième, cinquième
+
+Caractères spéciaux:
+Symboles monétaires: ? (euro), $ (dollar), £ (livre)
+Autres: © ® ? § ¶ ? ? ? ° ± × ÷
+
+Texte mixte:
+Hello World! - Bonjour le monde!
+Programming - Programmation
+Computer Science - Informatique
+
+Encodage du fichier: ISO-8859-1 (Latin-1)
+Heure de création: 15 janvier 2024, 15:05:00
+Ceci est un fichier texte français en encodage ISO-8859-1.
+
+Alphabet français avec accents:
+- Voyelles: a, e, i, o, u, y
+- Voyelles accentuées: à, á, â, ä, è, é, ê, ë, ì, í, î, ï, ò, ó, ô, ö, ù, ú, û, ü, ÿ
+- Consonnes: b, c, d, f, g, h, j, k, l, m, n, p, q, r, s, t, v, w, x, z
+- Cédille: ç
+
+Mots techniques:
+Technologie, programmation, ordinateur, internet, données
+Développement, test, débogage, optimisation, architecture
+Intelligence artificielle, apprentissage automatique, big data
+
+Exemples de phrases:
+La France est un pays situé en Europe occidentale.
+Paris est la capitale de la France.
+Le français utilise l'alphabet latin avec des accents.
+La technologie transforme notre façon de vivre.
+
+Ponctuation française:
+Guillemets: « » " "
+Signes: . , ; : ! ? ( ) [ ] { }
+Apostrophe: '
+
+Nombres:
+Chiffres: 1234567890
+Mots: un, deux, trois, quatre, cinq, six, sept, huit, neuf, dix
+Ordinaux: premier, deuxième, troisième, quatrième, cinquième
+
+Caractères spéciaux:
+Symboles monétaires: ? (euro), $ (dollar), £ (livre)
+Autres: © ® ? § ¶ ? ? ? ° ± × ÷
+
+Texte mixte:
+Hello World! - Bonjour le monde!
+Programming - Programmation
+Computer Science - Informatique
+
+Encodage du fichier: ISO-8859-1 (Latin-1)
+Heure de création: 15 janvier 2024, 15:05:00
+Ceci est un fichier texte français en encodage ISO-8859-1.
+
+Alphabet français avec accents:
+- Voyelles: a, e, i, o, u, y
+- Voyelles accentuées: à, á, â, ä, è, é, ê, ë, ì, í, î, ï, ò, ó, ô, ö, ù, ú, û, ü, ÿ
+- Consonnes: b, c, d, f, g, h, j, k, l, m, n, p, q, r, s, t, v, w, x, z
+- Cédille: ç
+
+Mots techniques:
+Technologie, programmation, ordinateur, internet, données
+Développement, test, débogage, optimisation, architecture
+Intelligence artificielle, apprentissage automatique, big data
+
+Exemples de phrases:
+La France est un pays situé en Europe occidentale.
+Paris est la capitale de la France.
+Le français utilise l'alphabet latin avec des accents.
+La technologie transforme notre façon de vivre.
+
+Ponctuation française:
+Guillemets: « » " "
+Signes: . , ; : ! ? ( ) [ ] { }
+Apostrophe: '
+
+Nombres:
+Chiffres: 1234567890
+Mots: un, deux, trois, quatre, cinq, six, sept, huit, neuf, dix
+Ordinaux: premier, deuxième, troisième, quatrième, cinquième
+
+Caractères spéciaux:
+Symboles monétaires: ? (euro), $ (dollar), £ (livre)
+Autres: © ® ? § ¶ ? ? ? ° ± × ÷
+
+Texte mixte:
+Hello World! - Bonjour le monde!
+Programming - Programmation
+Computer Science - Informatique
+
+Encodage du fichier: ISO-8859-1 (Latin-1)
+Heure de création: 15 janvier 2024, 15:05:00
